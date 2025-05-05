@@ -350,6 +350,17 @@
       }
     }
 
+    function escapeHtml(str) {
+      if (typeof str !== 'string') return str;
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+
     async function runComparison() {
       const api1Url = document.getElementById('api1url').value;
       const api2Url = document.getElementById('api2url').value;
@@ -377,12 +388,12 @@
 
         for (let key in api1Payload) {
           if (!(key in api2Payload)) {
-            missing2.innerHTML += `<li class="missing">Key "${key}"</li>`;
+            missing2.innerHTML += `<li class="missing">Key "${escapeHtml(key)}"</li>`;
           }
         }
         for (let key in api2Payload) {
           if (!(key in api1Payload)) {
-            missing1.innerHTML += `<li class="missing">Key "${key}"</li>`;
+            missing1.innerHTML += `<li class="missing">Key "${escapeHtml(key)}"</li>`;
           }
         }
 
@@ -391,9 +402,9 @@
             hasMismatch = true;
             mismatchBody.innerHTML += `
               <tr>
-                <td>${key}</td>
-                <td>${api1Payload[key]}</td>
-                <td>${api2Payload[key]}</td>
+                <td>${escapeHtml(key)}</td>
+                <td>${escapeHtml(api1Payload[key])}</td>
+                <td>${escapeHtml(api2Payload[key])}</td>
               </tr>`;
           }
         }
@@ -432,14 +443,14 @@
           keys1.forEach(k => {
             if (!keys2.includes(k)) {
               hasKey2 = true;
-              keyMissing2.innerHTML += `<tr><td>${type}</td><td>${k}</td></tr>`;
+              keyMissing2.innerHTML += `<tr><td>${escapeHtml(type)}</td><td>${escapeHtml(k)}</td></tr>`;
             }
           });
 
           keys2.forEach(k => {
             if (!keys1.includes(k)) {
               hasKey1 = true;
-              keyMissing1.innerHTML += `<tr><td>${type}</td><td>${k}</td></tr>`;
+              keyMissing1.innerHTML += `<tr><td>${escapeHtml(type)}</td><td>${escapeHtml(k)}</td></tr>`;
             }
           });
 
@@ -448,7 +459,7 @@
             const val2 = conf2.find(x => x.key === k)?.val;
             if (val1 !== undefined && val2 !== undefined && val1 !== val2) {
               hasValDiff = true;
-              valTable.innerHTML += `<tr><td>${type}</td><td>${k}</td><td>${val1}</td><td>${val2}</td></tr>`;
+              valTable.innerHTML += `<tr><td>${escapeHtml(type)}</td><td>${escapeHtml(k)}</td><td>${escapeHtml(val1)}</td><td>${escapeHtml(val2)}</td></tr>`;
             }
           });
         }
