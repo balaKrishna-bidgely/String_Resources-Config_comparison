@@ -224,9 +224,9 @@
     <h2>String Resources Comparison</h2>
     <div class="comparison-section">
       <h3>Missing Keys</h3>
-      <h4>Missing in API 1</h4>
+      <h4>Missing in API 1 <span class="api-env1"></span></h4>
       <ul id="missing-in-api1"></ul>
-      <h4>Missing in API 2</h4>
+      <h4>Missing in API 2 <span class="api-env2"></span></h4>
       <ul id="missing-in-api2"></ul>
     </div>
 
@@ -236,8 +236,8 @@
         <thead>
           <tr>
             <th>Key</th>
-            <th>API 1 Value</th>
-            <th>API 2 Value</th>
+            <th>API 1 Value <span class="api-env1"></span></th>
+            <th>API 2 Value <span class="api-env2"></span></th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -247,11 +247,11 @@
 
     <div class="container">
       <div class="api-response">
-        <h3>API 1 Response</h3>
+        <h3>API 1 Response <span class="api-env1"></span></h3>
         <pre id="api1-data-string">Waiting...</pre>
       </div>
       <div class="api-response">
-        <h3>API 2 Response</h3>
+        <h3>API 2 Response <span class="api-env2"></span></h3>
         <pre id="api2-data-string">Waiting...</pre>
       </div>
     </div>
@@ -262,15 +262,15 @@
     <h2>Configuration Comparison</h2>
     <div class="comparison-section">
       <h3>Missing Configuration Types</h3>
-      <h4>Missing in API 1</h4>
+      <h4>Missing in API 1 <span class="api-env1"></span></h4>
       <ul id="missing-config-types-api1"></ul>
-      <h4>Missing in API 2</h4>
+      <h4>Missing in API 2 <span class="api-env2"></span></h4>
       <ul id="missing-config-types-api2"></ul>
     </div>
 
     <div class="comparison-section">
       <h3>Missing Configuration Keys</h3>
-      <h4>API 1</h4>
+      <h4>API 1 <span class="api-env1"></span></h4>
       <table id="missing-config-keys-api1-table">
         <thead>
           <tr>
@@ -282,7 +282,7 @@
       </table>
       <p id="no-missing-keys-api1" style="display:none;">No missing config keys in API 1.</p>
 
-      <h4>API 2</h4>
+      <h4>API 2 <span class="api-env2"></span></h4>
       <table id="missing-config-keys-api2-table">
         <thead>
           <tr>
@@ -302,8 +302,8 @@
           <tr>
             <th>Config Type</th>
             <th>Config Key</th>
-            <th>API 1 Value</th>
-            <th>API 2 Value</th>
+            <th>API 1 Value <span class="api-env1"></span></th>
+            <th>API 2 Value <span class="api-env2"></span></th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -313,11 +313,11 @@
 
     <div class="container">
       <div class="api-response">
-        <h3>API 1 Response</h3>
+        <h3>API 1 Response <span class="api-env1"></span></h3>
         <pre id="api1-data-config">Waiting...</pre>
       </div>
       <div class="api-response">
-        <h3>API 2 Response</h3>
+        <h3>API 2 Response <span class="api-env1"></span></h3>
         <pre id="api2-data-config">Waiting...</pre>
       </div>
     </div>
@@ -350,20 +350,15 @@
       }
     }
 
-    function escapeHtml(str) {
-      if (typeof str !== 'string') return str;
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-
     async function runComparison() {
       const api1Url = document.getElementById('api1url').value;
       const api2Url = document.getElementById('api2url').value;
+      const env1 = document.getElementById('env1').value;
+      const env2 = document.getElementById('env2').value;
+
+      document.querySelectorAll('.api-env1').forEach(el => el.textContent = `(${env1})`);
+      document.querySelectorAll('.api-env2').forEach(el => el.textContent = `(${env2})`);
+
 
       const activeTab = document.querySelector('.tab-content.active').id;
 
@@ -388,12 +383,12 @@
 
         for (let key in api1Payload) {
           if (!(key in api2Payload)) {
-            missing2.innerHTML += `<li class="missing">Key "${escapeHtml(key)}"</li>`;
+            missing2.innerHTML += `<li class="missing">Key "${key}"</li>`;
           }
         }
         for (let key in api2Payload) {
           if (!(key in api1Payload)) {
-            missing1.innerHTML += `<li class="missing">Key "${escapeHtml(key)}"</li>`;
+            missing1.innerHTML += `<li class="missing">Key "${key}"</li>`;
           }
         }
 
@@ -402,9 +397,9 @@
             hasMismatch = true;
             mismatchBody.innerHTML += `
               <tr>
-                <td>${escapeHtml(key)}</td>
-                <td>${escapeHtml(api1Payload[key])}</td>
-                <td>${escapeHtml(api2Payload[key])}</td>
+                <td>${key}</td>
+                <td>${api1Payload[key]}</td>
+                <td>${api2Payload[key]}</td>
               </tr>`;
           }
         }
@@ -443,14 +438,14 @@
           keys1.forEach(k => {
             if (!keys2.includes(k)) {
               hasKey2 = true;
-              keyMissing2.innerHTML += `<tr><td>${escapeHtml(type)}</td><td>${escapeHtml(k)}</td></tr>`;
+              keyMissing2.innerHTML += `<tr><td>${type}</td><td>${k}</td></tr>`;
             }
           });
 
           keys2.forEach(k => {
             if (!keys1.includes(k)) {
               hasKey1 = true;
-              keyMissing1.innerHTML += `<tr><td>${escapeHtml(type)}</td><td>${escapeHtml(k)}</td></tr>`;
+              keyMissing1.innerHTML += `<tr><td>${type}</td><td>${k}</td></tr>`;
             }
           });
 
@@ -459,7 +454,7 @@
             const val2 = conf2.find(x => x.key === k)?.val;
             if (val1 !== undefined && val2 !== undefined && val1 !== val2) {
               hasValDiff = true;
-              valTable.innerHTML += `<tr><td>${escapeHtml(type)}</td><td>${escapeHtml(k)}</td><td>${escapeHtml(val1)}</td><td>${escapeHtml(val2)}</td></tr>`;
+              valTable.innerHTML += `<tr><td>${type}</td><td>${k}</td><td>${val1}</td><td>${val2}</td></tr>`;
             }
           });
         }
