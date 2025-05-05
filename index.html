@@ -221,7 +221,7 @@
 
   <!-- Tab 1 Content: String Resources -->
   <div id="stringTab" class="tab-content active">
-    <h2>String Resources Comparison</h2>
+    <h2>String Resources Comparison <span class="env-comparison"></span></h2>
     <div class="comparison-section">
       <h3>Missing Keys</h3>
       <h4>Missing in API 1 <span class="api-env1"></span></h4>
@@ -259,7 +259,7 @@
 
   <!-- Tab 2 Content: Config Comparison -->
   <div id="configTab" class="tab-content">
-    <h2>Configuration Comparison</h2>
+    <h2>Configuration Comparison <span class="env-comparison"></span></h2>
     <div class="comparison-section">
       <h3>Missing Configuration Types</h3>
       <h4>Missing in API 1 <span class="api-env1"></span></h4>
@@ -365,6 +365,8 @@
       const api2Url = document.getElementById('api2url').value;
       const env1 = document.getElementById('env1').value;
       const env2 = document.getElementById('env2').value;
+
+      document.querySelectorAll('.env-comparison').forEach(el => el.textContent = `(${env1} VS ${env2})`);
 
       document.querySelectorAll('.api-env1').forEach(el => el.textContent = `(${env1})`);
       document.querySelectorAll('.api-env2').forEach(el => el.textContent = `(${env2})`);
